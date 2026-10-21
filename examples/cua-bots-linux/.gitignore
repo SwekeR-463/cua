@@ -6,3 +6,6 @@ web/node_modules/
 web/dist/
 electron/node_modules/
 *.log
+/build/
+/dist/
+/dist-packages/

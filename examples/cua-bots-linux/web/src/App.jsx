@@ -244,8 +244,17 @@ export default function App() {
     const params = new URLSearchParams(location.search)
     const botId = params.get('bot')
     const view = params.get('view')
+    const name = params.get('name')
+    const step = params.get('step')
     if (botId) setRoute({ kind: 'bot', id: botId })
     else if (view && ['scheduled', 'approvals', 'outputs', 'new'].includes(view)) setRoute({ kind: view })
+    if (name || step) {
+      setDraft((current) => ({
+        ...current,
+        ...(name ? { name, avatar: { ...current.avatar, color: defaultColorFor(name) } } : {}),
+        ...(step ? { step: Math.max(0, Math.min(2, Number(step) || 0)) } : {}),
+      }))
+    }
     if (params.get('computer') === '1') { setShowComputer(true); setShowProfile(false) }
     api.get('/api/state').then((data) => {
       setState(data)

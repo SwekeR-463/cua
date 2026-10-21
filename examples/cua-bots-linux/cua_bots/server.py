@@ -31,7 +31,10 @@ from .store import BotStore
 from .volume import LocalVolume, VolumeError, VolumeLayout
 
 VERSION = "0.1.0"
-WEB_DIR_ROOT = Path(__file__).resolve().parent.parent / "web"
+WEB_DIR_ROOT = Path(os.environ.get(
+    "CUA_BOTS_WEB_DIR",
+    Path(__file__).resolve().parent.parent / "web",
+))
 WEB_DIR = WEB_DIR_ROOT / "dist" if (WEB_DIR_ROOT / "dist").exists() else WEB_DIR_ROOT
 OLLAMA = os.environ.get("CUA_BOTS_OLLAMA", "http://127.0.0.1:11434").rstrip("/")
 PORT = int(os.environ.get("CUA_BOTS_PORT", "8765"))

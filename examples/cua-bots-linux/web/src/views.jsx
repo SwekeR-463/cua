@@ -3,6 +3,7 @@ import { AvatarBadge, Koala, normalizeAvatar, BOT_COLORS, defaultColorFor } from
 import { AvatarPicker, BotAvatar, ApprovalCard, MessageRow, PresenceLine, ResultCard, SignInCard, TaskRow, fileIcon } from './components.jsx'
 import { Icon } from './icons.jsx'
 import { api, day, relativeRun, timeAgo } from './api.js'
+import { HARNESSES } from './harnesses.js'
 
 function unreadFor(state, botId) {
   const approvals = state.approvals?.some((a) => a.bot_id === botId && a.state === 'pending')
@@ -100,12 +101,7 @@ export function NewBotView({ draft, setDraft, onCreate, engineError, localModel 
               </div>
               <div className="field-label" style={{ marginTop: 18 }}>Agent</div>
               <div className="agent-list">
-                {[
-                  ['hermes', 'Hermes', 'A persistent assistant with its own memory'],
-                  ['openclaw', 'OpenClaw', 'A persistent assistant with standing orders'],
-                  ['openai-codex', 'Codex', 'A coding agent'],
-                  ['claude-code', 'Claude Code', 'A coding agent'],
-                ].map(([value, title, blurb]) => (
+                {HARNESSES.map(({ value, title, blurb }) => (
                   <button key={value} className={`agent-option ${draft.harness === value ? 'selected' : ''}`}
                           onClick={() => setDraft({ ...draft, harness: value })}>
                     <span><span className="agent-title">{title}</span><span className="agent-sub">{blurb}</span></span>
@@ -114,7 +110,7 @@ export function NewBotView({ draft, setDraft, onCreate, engineError, localModel 
                 ))}
               </div>
               {localModel && (
-                <div className="hint">Local Ollama drives Hermes and OpenClaw. Codex and Claude Code need their own provider keys.</div>
+                <div className="hint">Local Ollama drives Hermes, OpenClaw, OpenCode, Pi and Goose. Codex, Claude Code, Gemini CLI and Antigravity need their own provider endpoint/keys.</div>
               )}
               <div className="memory-line">
                 <Icon name="brain" size={16} />

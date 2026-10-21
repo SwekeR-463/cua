@@ -72,8 +72,9 @@ The sidecar starts Ollama with a 65,536-token context and an 8-bit KV cache
 fine for trying the app, but small local models are best-effort at the
 directive protocol and multi-step tool use. Use a provider key or a larger
 model with at least 64k context for reliable work. The sidecar speaks the
-OpenAI chat wire, so use **Hermes** or **OpenClaw** with it; Codex and Claude
-Code need their own provider endpoint/keys.
+OpenAI chat wire, so use **Hermes**, **OpenClaw**, **OpenCode**, **Pi** or
+**Goose** with it; Codex, Claude Code, Gemini CLI and Antigravity need their
+own provider endpoint/keys.
 
 The sidecar is named `cua-bots-ollama`; stop it with
 `docker rm -f cua-bots-ollama`. Set `CUA_BOTS_OLLAMA_SIDECAR=0` to disable it.
@@ -91,14 +92,17 @@ OPENAI_API_KEY=ollama ./run.sh
 
 ### Provider keys
 
-The four harnesses from the macOS app are available: Hermes, OpenClaw, Codex
-and Claude Code. The backend forwards only the key variables the harness
-needs:
+The macOS sample exposes four harnesses. This port exposes all nine Cua
+Spaces supports: Hermes, OpenClaw, OpenCode, Pi, Goose, Codex, Claude Code,
+Gemini CLI and Google Antigravity. The backend forwards only the key variables
+the harness needs:
 
 ```sh
 ANTHROPIC_API_KEY=... ./run.sh          # Claude Code, Hermes, OpenClaw
 OPENAI_API_KEY=... ./run.sh             # Codex, Hermes, OpenClaw
-OPENROUTER_API_KEY=... ./run.sh         # Hermes, OpenClaw
+OPENROUTER_API_KEY=... ./run.sh         # Hermes, OpenClaw, OpenCode, Pi, Goose
+GEMINI_API_KEY=... ./run.sh             # Gemini CLI, Antigravity
+CODEX_API_KEY=... ./run.sh              # Codex (or OPENAI_API_KEY)
 ```
 
 ### Scripted demo
@@ -109,6 +113,19 @@ CUA_BOTS_DEMO=1 ./run.sh
 
 Useful for screenshots and UI work: the bot replies with scripted directives,
 so the chat, tasks, approvals and routines flow without a model.
+
+## Packaging (deb / AppImage)
+
+```sh
+./scripts/build-packages.sh
+sudo dpkg -i dist-packages/cua-bots-0.1.0-amd64.deb
+cua-bots
+```
+
+The deb bundles the frozen Python backend, the built UI and Electron under
+`/opt/Cua Bots`, installs a `cua-bots` launcher and a desktop entry, and
+recommends `docker.io`. The AppImage is the same app in one file. No terminal
+or Python installation is needed at runtime.
 
 ## Data
 

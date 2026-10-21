@@ -1,13 +1,69 @@
 {
-  "name": "cua-bots-linux-desktop",
+  "name": "cua-bots-linux",
   "version": "0.1.0",
   "private": true,
-  "description": "Cua Bots for Linux desktop shell",
+  "description": "Cua Bots for Linux: persistent bots with their own computers",
+  "author": {
+    "name": "Cua Bots Linux port",
+    "email": "swekerswasti@gmail.com"
+  },
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron --no-sandbox .",
+    "dist": "electron-builder --linux deb AppImage"
   },
   "devDependencies": {
-    "electron": "^33.2.0"
-  }
+    "electron": "^33.2.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "ai.cua.cuabots.linux",
+    "productName": "Cua Bots",
+    "artifactName": "cua-bots-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "../dist-packages",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../dist/cua-bots-server",
+        "to": "server/cua-bots-server"
+      },
+      {
+        "from": "../web/dist",
+        "to": "web"
+      }
+    ],
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png",
+      "executableName": "cua-bots",
+      "maintainer": "SwekeR-463 <swekerswasti@gmail.com>"
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnss3",
+        "libasound2",
+        "libgbm1",
+        "libxss1"
+      ],
+      "recommends": [
+        "docker.io"
+      ],
+      "afterInstall": "build/after-install.sh",
+      "afterRemove": "build/after-remove.sh"
+    },
+    "afterPack": "build/after-pack.js"
+  },
+  "homepage": "https://github.com/SwekeR-463/cua/tree/cua-bots-linux/examples/cua-bots-linux",
+  "license": "FSL-1.1-MIT"
 }

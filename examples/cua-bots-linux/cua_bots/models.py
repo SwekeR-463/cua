@@ -50,6 +50,11 @@ class Harness(str, Enum):
     OPENCLAW = "openclaw"
     CODEX = "openai-codex"
     CLAUDE_CODE = "claude-code"
+    OPENCODE = "opencode"
+    PI = "pi"
+    GOOSE = "goose"
+    GEMINI_CLI = "gemini-cli"
+    GOOGLE_ANTIGRAVITY = "google-antigravity"
 
     @property
     def display_name(self) -> str:
@@ -58,6 +63,11 @@ class Harness(str, Enum):
             Harness.OPENCLAW: "OpenClaw",
             Harness.CODEX: "Codex",
             Harness.CLAUDE_CODE: "Claude Code",
+            Harness.OPENCODE: "OpenCode",
+            Harness.PI: "Pi",
+            Harness.GOOSE: "Goose",
+            Harness.GEMINI_CLI: "Gemini CLI",
+            Harness.GOOGLE_ANTIGRAVITY: "Google Antigravity",
         }[self]
 
     @property
@@ -67,16 +77,20 @@ class Harness(str, Enum):
             Harness.OPENCLAW: "A persistent assistant with standing orders",
             Harness.CODEX: "A coding agent",
             Harness.CLAUDE_CODE: "A coding agent",
+            Harness.OPENCODE: "An open-source coding agent",
+            Harness.PI: "A small, hackable coding agent",
+            Harness.GOOSE: "An extensible local agent",
+            Harness.GEMINI_CLI: "Google's command-line agent",
+            Harness.GOOGLE_ANTIGRAVITY: "Google's IDE agent, headless",
         }[self]
 
     @property
     def instructions_file(self) -> str:
-        return {
-            Harness.CLAUDE_CODE: "CLAUDE.md",
-            Harness.HERMES: "SOUL.md",
-            Harness.OPENCLAW: "AGENTS.md",
-            Harness.CODEX: "AGENTS.md",
-        }[self]
+        if self is Harness.CLAUDE_CODE:
+            return "CLAUDE.md"
+        if self is Harness.HERMES:
+            return "SOUL.md"
+        return "AGENTS.md"
 
     @property
     def key_vars(self) -> list[str]:
@@ -84,6 +98,12 @@ class Harness(str, Enum):
             return ["ANTHROPIC_API_KEY"]
         if self is Harness.CODEX:
             return ["OPENAI_API_KEY"]
+        if self in (Harness.GEMINI_CLI, Harness.GOOGLE_ANTIGRAVITY):
+            return ["GEMINI_API_KEY", "GOOGLE_API_KEY"]
+        if self is Harness.GOOSE:
+            return ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GOOGLE_API_KEY", "OPENROUTER_API_KEY"]
+        if self in (Harness.OPENCODE, Harness.PI):
+            return ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "OPENROUTER_API_KEY"]
         return ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "OPENROUTER_API_KEY"]
 
     @property
@@ -92,6 +112,8 @@ class Harness(str, Enum):
             return "anthropic"
         if self is Harness.CODEX:
             return "openai-responses"
+        if self in (Harness.GEMINI_CLI, Harness.GOOGLE_ANTIGRAVITY):
+            return "gemini"
         return "openai-chat"
 
 

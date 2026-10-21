@@ -29,6 +29,18 @@ def test_agent_name_and_bot_fields():
     assert Bot.new("Chris").computer_title == "Chris' computer"
 
 
+def test_harnesses():
+    assert len(list(Harness)) == 9
+    assert Harness.OPENCODE.value == "opencode"
+    assert Harness.GEMINI_CLI.instructions_file == "AGENTS.md"
+    assert Harness.CLAUDE_CODE.instructions_file == "CLAUDE.md"
+    assert Harness.HERMES.instructions_file == "SOUL.md"
+    assert Harness.CODEX.wire == "openai-responses"
+    assert Harness.GEMINI_CLI.wire == "gemini"
+    assert Harness.PI.wire == "openai-chat"
+    assert "GEMINI_API_KEY" in Harness.GEMINI_CLI.key_vars
+
+
 def test_directive_parser():
     raw = "\n".join([
         "Hi there.",
