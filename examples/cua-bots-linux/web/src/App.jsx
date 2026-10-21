@@ -241,6 +241,12 @@ export default function App() {
   }, [state, route])
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const botId = params.get('bot')
+    const view = params.get('view')
+    if (botId) setRoute({ kind: 'bot', id: botId })
+    else if (view && ['scheduled', 'approvals', 'outputs', 'new'].includes(view)) setRoute({ kind: view })
+    if (params.get('computer') === '1') { setShowComputer(true); setShowProfile(false) }
     api.get('/api/state').then((data) => {
       setState(data)
       setRoute((current) => {

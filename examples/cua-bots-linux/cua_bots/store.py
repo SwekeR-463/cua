@@ -799,6 +799,9 @@ class BotStore:
             tasks = self.volume.read_json(VolumeLayout.tasks(bot.id))
             self.tasks[bot.id] = ([BotTask.from_dict(t) for t in tasks]
                                   if isinstance(tasks, list) else [])
+            # Rewrite the generated home files so an app update refreshes the
+            # instructions and rules the harness reads. Memory is untouched.
+            self.write_home(bot)
 
     # -- Mutation helpers -------------------------------------------------
 

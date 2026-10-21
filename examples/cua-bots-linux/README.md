@@ -28,7 +28,14 @@ cd examples/cua-bots-linux
 
 The first run creates `.venv`, installs `requirements.txt`, builds `web/dist`
 if needed, starts the backend on `127.0.0.1:8765`, then opens Electron (if
-`electron/node_modules` exists) or Chrome in app mode.
+installed) or Chrome in app mode. To install the desktop shell:
+
+```sh
+(cd electron && npm install)
+```
+
+If npm blocks Electron's postinstall, run
+`node electron/node_modules/electron/install.js` once.
 
 ```sh
 ./run.sh --backend-only     # API + UI only, no window
@@ -57,11 +64,19 @@ machine. It uses the GPU when the Docker host has one.
 # default model
 ./run.sh
 # choose another model already present in the host's Ollama store
-CUA_BOTS_MODEL=qwen3:4b ./run.sh
+CUA_BOTS_MODEL=llama3.2:3b ./run.sh
 ```
+
+The sidecar starts Ollama with a 65,536-token context and an 8-bit KV cache
+(the context Hermes expects) and uses the GPU when available. A 3B model is
+fine for trying the app, but small local models are best-effort at the
+directive protocol and multi-step tool use. Use a provider key or a larger
+model with at least 64k context for reliable work.
 
 The sidecar is named `cua-bots-ollama`; stop it with
 `docker rm -f cua-bots-ollama`. Set `CUA_BOTS_OLLAMA_SIDECAR=0` to disable it.
+The app listens on `127.0.0.1` by default; only set `CUA_BOTS_HOST=0.0.0.0`
+when you deliberately want the API reachable from another machine.
 
 If the host's Docker bridge can reach your Ollama (Docker Desktop,
 `host.docker.internal`, or a LAN address), point the app at it directly:
