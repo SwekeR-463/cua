@@ -71,7 +71,9 @@ The sidecar starts Ollama with a 65,536-token context and an 8-bit KV cache
 (the context Hermes expects) and uses the GPU when available. A 3B model is
 fine for trying the app, but small local models are best-effort at the
 directive protocol and multi-step tool use. Use a provider key or a larger
-model with at least 64k context for reliable work.
+model with at least 64k context for reliable work. The sidecar speaks the
+OpenAI chat wire, so use **Hermes** or **OpenClaw** with it; Codex and Claude
+Code need their own provider endpoint/keys.
 
 The sidecar is named `cua-bots-ollama`; stop it with
 `docker rm -f cua-bots-ollama`. Set `CUA_BOTS_OLLAMA_SIDECAR=0` to disable it.
@@ -183,7 +185,10 @@ cua-bots-linux/
 ## Tests
 
 ```sh
-.venv/bin/python -m pytest tests -q
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+pytest -q
 (cd web && npm run build)
 ```
 

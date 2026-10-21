@@ -56,7 +56,7 @@ export function Sidebar({ state, route, setRoute, onNewBot }) {
   )
 }
 
-export function NewBotView({ draft, setDraft, onCreate, engineError }) {
+export function NewBotView({ draft, setDraft, onCreate, engineError, localModel }) {
   const name = draft.name
   const displayName = name.trim() || 'your bot'
   const step = draft.step
@@ -113,6 +113,9 @@ export function NewBotView({ draft, setDraft, onCreate, engineError }) {
                   </button>
                 ))}
               </div>
+              {localModel && (
+                <div className="hint">Local Ollama drives Hermes and OpenClaw. Codex and Claude Code need their own provider keys.</div>
+              )}
               <div className="memory-line">
                 <Icon name="brain" size={16} />
                 <span>Memory</span>

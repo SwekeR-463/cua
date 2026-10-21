@@ -387,7 +387,7 @@ export default function App() {
                onNewBot={() => { setRoute({ kind: 'new' }); setDraft(EMPTY_DRAFT); setShowComputer(false) }} />
       <main className="main">
         {state.engine_error && <div className="banner error"><Icon name="alert" size={15} /> {state.engine_error}</div>}
-        {route.kind === 'new' && <NewBotView draft={draft} setDraft={setDraft} onCreate={createBot} engineError={state.engine_error} />}
+        {route.kind === 'new' && <NewBotView draft={draft} setDraft={setDraft} onCreate={createBot} engineError={state.engine_error} localModel={(state.model?.label || '').startsWith('Ollama')} />}
         {route.kind === 'bot' && selected && (
           <div className="detail">
             <div className="detail-toolbar">

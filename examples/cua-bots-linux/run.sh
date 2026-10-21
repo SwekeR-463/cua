@@ -39,7 +39,7 @@ for _ in $(seq 1 120); do
   sleep 0.5
 done
 
-if [[ -x electron/node_modules/.bin/electron ]]; then
+if [[ -x electron/node_modules/electron/dist/electron ]]; then
   (cd electron && ./node_modules/.bin/electron --no-sandbox .)
 elif command -v google-chrome >/dev/null 2>&1; then
   google-chrome --app="http://127.0.0.1:${CUA_BOTS_PORT}" --window-size=1280,800 --class=CuaBots
