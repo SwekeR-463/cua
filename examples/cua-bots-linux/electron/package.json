@@ -46,7 +46,11 @@
       "category": "Utility",
       "icon": "build/icon.png",
       "executableName": "cua-bots",
-      "maintainer": "SwekeR-463 <swekerswasti@gmail.com>"
+      "maintainer": "SwekeR-463 <swekerswasti@gmail.com>",
+      "syncDesktopName": true,
+      "executableArgs": [
+        "--no-sandbox"
+      ]
     },
     "deb": {
       "depends": [
@@ -65,5 +69,6 @@
     "afterPack": "build/after-pack.js"
   },
   "homepage": "https://github.com/SwekeR-463/cua/tree/cua-bots-linux/examples/cua-bots-linux",
-  "license": "FSL-1.1-MIT"
+  "license": "FSL-1.1-MIT",
+  "desktopName": "cua-bots"
 }

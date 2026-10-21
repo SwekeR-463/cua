@@ -7,7 +7,11 @@ const { spawn } = require('node:child_process')
 
 // The SUID chrome-sandbox helper is often not root-owned in a dev checkout.
 app.commandLine.appendSwitch('no-sandbox')
+// The UI is flat images and text; software rendering avoids the NVIDIA/Wayland
+// GBM errors that can leave an Electron window blank.
+app.disableHardwareAcceleration()
 app.setName('Cua Bots')
+if (process.platform === 'linux') app.setDesktopName('cua-bots.desktop')
 
 let backend = null
 let mainWindow = null
