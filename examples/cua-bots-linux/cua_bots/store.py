@@ -162,6 +162,14 @@ class BotStore:
         try:
             self.update(bot_id, lambda b: (setattr(b, "status", "Setting up"),
                                            setattr(b, "mood", BotMood.WORKING)))
+            if bot.space_id:
+                try:
+                    await self.engine.space(bot)
+                except Exception:
+                    # The Space was deleted or the registry lost it; make a
+                    # fresh computer instead of failing every turn.
+                    self.update(bot_id, lambda b: setattr(b, "space_id", None))
+                    bot = self.bot(bot_id) or bot
             if not bot.space_id and not self.engine.model.demo:
                 space_id = await self.engine.provision(
                     bot, lambda _phase, text: self.set_setup(bot_id, text))
