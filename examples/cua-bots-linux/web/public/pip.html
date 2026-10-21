@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Cua Bots · computer</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #101115; color: #e8e8ea; font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    header { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #191a1f; }
+    header span { flex: 1; }
+    #screen { width: 100%; height: calc(100% - 38px); object-fit: contain; background: #000; display: block; }
+    .empty { display: grid; place-items: center; height: calc(100% - 38px); color: #8b8d95; }
+  </style>
+</head>
+<body>
+  <header><strong id="name">Cua Bots</strong><span></span><small id="status"></small></header>
+  <img id="screen" alt="Bot computer" />
+  <div id="empty" class="empty" hidden>Connecting…</div>
+  <script>
+    const params = new URLSearchParams(location.search)
+    const botId = params.get('bot')
+    const img = document.getElementById('screen')
+    const empty = document.getElementById('empty')
+    let timer
+    async function tick() {
+      if (!botId) { empty.hidden = false; empty.textContent = 'No bot selected'; return }
+      try {
+        const state = await (await fetch('/api/state')).json()
+        const bot = state.bots.find((b) => b.id === botId)
+        if (bot) document.getElementById('name').textContent = bot.computer_title || bot.name
+        const response = await fetch(`/api/bots/${encodeURIComponent(botId)}/screenshot?t=${Date.now()}`)
+        if (!response.ok) throw new Error('No screen')
+        const blob = await response.blob()
+        const url = URL.createObjectURL(blob)
+        img.onload = () => { URL.revokeObjectURL(url); empty.hidden = true; img.hidden = false }
+        img.src = url
+        document.getElementById('status').textContent = bot?.status || ''
+      } catch (error) {
+        empty.hidden = false; img.hidden = true; empty.textContent = error.message || 'Not reachable'
+      }
+      timer = setTimeout(tick, 900)
+    }
+    tick()
+    addEventListener('beforeunload', () => clearTimeout(timer))
+  </script>
+</body>
+</html>
